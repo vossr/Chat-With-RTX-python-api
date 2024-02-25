@@ -14,32 +14,12 @@ def join_queue(session_hash, fn_index, port, chatdata):
     json_string = json.dumps(python_object)
 
     url = f"http://127.0.0.1:{port}/queue/join?__theme=dark"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
-        "Accept": "*/*",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Content-Type": "application/json",
-        "Sec-GPC": "1",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin"
-    }
-    response = requests.post(url, headers=headers, data=json_string)
+
+    response = requests.post(url, data=json_string)
     # print("Join Queue Response:", response.json())
 
 def listen_for_updates(session_hash, port):
     url = f"http://127.0.0.1:{port}/queue/data?session_hash={session_hash}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
-        "Accept": "text/event-stream",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Sec-GPC": "1",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin",
-        "Pragma": "no-cache",
-        "Cache-Control": "no-cache"
-    }
 
     response = requests.get(url, stream=True)
     for line in response.iter_lines():
@@ -54,7 +34,7 @@ def listen_for_updates(session_hash, port):
                 pass
     return ""
 
-def call_rtx(message, port):
+def send_message(message, port):
     session_hash = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
 
     #idk what fn_indexes are, some server state setup functions

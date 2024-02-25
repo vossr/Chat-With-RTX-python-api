@@ -1,13 +1,13 @@
 from time import time_ns
-from call_rtx import call_rtx
+import rtx_api
 
 if __name__ == '__main__':
-    port = "37424"
+    port = 44692
 
     current_time_ns = time_ns()
     start_sec = current_time_ns / 1_000_000_000
 
-    out = call_rtx("War, Famine, and Pestilence", port)
+    out = rtx_api.send_message("Write essay on: War, Famine, and Pestilence", port)
 
     current_time_ns = time_ns()
     end_sec = current_time_ns / 1_000_000_000
@@ -18,5 +18,5 @@ if __name__ == '__main__':
     print("tokens/s:", int(tokens_per_second))
 
     print(out + "\n")
-    out = call_rtx("Write one sentence sumary of: " + out, port)
+    out = rtx_api.send_message("Write single sentence sumary of: " + out, port)
     print("SUMMARY: " + out)
