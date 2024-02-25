@@ -1,6 +1,6 @@
-##Python api for calling Chat With RTX local server
+## Python api for calling Chat With RTX local server
 
-###Usage
+### Usage
 ```python
 import rtx_api
 
@@ -10,7 +10,7 @@ print(message)
 ```
 
 
-###Speed
+### Speed
 ```
 Chat With RTX builds int4 (W4A16 AWQ) tensortRT engines for mistral 7b and llama2 13b
 
