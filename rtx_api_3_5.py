@@ -8,13 +8,11 @@ def join_queue(session_hash, fn_index, port, chatdata):
         "data": chatdata,
         "event_data": None,
         "fn_index": fn_index,
-        "trigger_id": 46,
         "session_hash": session_hash
     }
     json_string = json.dumps(python_object)
 
     url = f"http://127.0.0.1:{port}/queue/join?__theme=dark"
-
     response = requests.post(url, data=json_string)
     # print("Join Queue Response:", response.json())
 
@@ -37,24 +35,23 @@ def listen_for_updates(session_hash, port):
 def send_message(message, port):
     session_hash = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
 
-    #idk what fn_indexes are, some server state setup functions
-    #i just copied the network requests
+    #fn_indexes are some gradio generated indexes from rag/trt/ui/user_interface.py
 
-    join_queue(session_hash, 36, port, [])
+    join_queue(session_hash, 30, port, [])
     listen_for_updates(session_hash, port)
 
-    join_queue(session_hash, 37, port, [])
+    join_queue(session_hash, 31, port, [])
     listen_for_updates(session_hash, port)
 
     chatdata = ["", [], "AI model default", None]
-    join_queue(session_hash, 38, port, chatdata)
+    join_queue(session_hash, 32, port, chatdata)
     listen_for_updates(session_hash, port)
 
     chatdata = ["", []]
-    join_queue(session_hash, 39, port, chatdata)
+    join_queue(session_hash, 33, port, chatdata)
     listen_for_updates(session_hash, port)
 
     #add chat history here -v
     chatdata = [[[message, None]], None]
-    join_queue(session_hash, 40, port, chatdata)
+    join_queue(session_hash, 34, port, chatdata)
     return listen_for_updates(session_hash, port)

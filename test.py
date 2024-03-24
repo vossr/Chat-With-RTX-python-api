@@ -1,8 +1,8 @@
 from time import time_ns
-import rtx_api
+import rtx_api_3_5 as rtx_api
 
 if __name__ == '__main__':
-    port = 44692
+    port = your port number
 
     current_time_ns = time_ns()
     start_sec = current_time_ns / 1_000_000_000
