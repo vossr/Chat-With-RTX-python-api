@@ -24,6 +24,7 @@ def find_chat_with_rtx_port():
             pass
 
 def join_queue(session_hash, fn_index, port, chatdata):
+    #fn_indexes are some gradio generated indexes from rag/trt/ui/user_interface.py
     python_object = {
         "data": chatdata,
         "event_data": None,
@@ -59,22 +60,6 @@ def send_message(message):
         raise Exception("Failed to find a server port for 'Chat with RTX'. Ensure the server is running.")
 
     session_hash = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-
-    #fn_indexes are some gradio generated indexes from rag/trt/ui/user_interface.py
-
-    join_queue(session_hash, 30, port, [])
-    listen_for_updates(session_hash, port)
-
-    join_queue(session_hash, 31, port, [])
-    listen_for_updates(session_hash, port)
-
-    chatdata = ["", [], "AI model default", None]
-    join_queue(session_hash, 32, port, chatdata)
-    listen_for_updates(session_hash, port)
-
-    chatdata = ["", []]
-    join_queue(session_hash, 33, port, chatdata)
-    listen_for_updates(session_hash, port)
 
     #add chat history here -v
     chatdata = [[[message, None]], None]
