@@ -4,8 +4,7 @@
 ```python
 import rtx_api_3_5 as rtx_api
 
-your_localhost_port = "set_port_number"
-response = rtx_api.send_message("explain preprompt", your_localhost_port)
+response = rtx_api.send_message("explain preprompt")
 print(response)
 ```
 
