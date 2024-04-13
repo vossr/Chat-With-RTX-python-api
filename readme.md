@@ -4,7 +4,7 @@
 ```python
 import rtx_api_3_5 as rtx_api
 
-response = rtx_api.send_message("explain preprompt")
+response = rtx_api.send_message("write fire emoji")
 print(response)
 ```
 
