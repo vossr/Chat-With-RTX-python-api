@@ -6,6 +6,7 @@ import json
 import os
 
 port = None
+fn_index = None
 
 #the server is https because speech to text js microphone needs https
 appdata_folder = os.path.dirname(os.getenv('APPDATA')).replace('\\', '/')
@@ -32,12 +33,12 @@ def find_chat_with_rtx_port():
         except:
             pass
 
-def join_queue(session_hash, fn_index, port, chatdata):
+def join_queue(session_hash, set_fn_index, port, chatdata):
     #fn_indexes are some gradio generated indexes from rag/trt/ui/user_interface.py
     python_object = {
         "data": chatdata,
         "event_data": None,
-        "fn_index": fn_index,
+        "fn_index": set_fn_index,
         "session_hash": session_hash
     }
     json_string = json.dumps(python_object)
@@ -63,14 +64,35 @@ def listen_for_updates(session_hash, port):
         pass
     return ""
 
+def auto_find_fn_index(port):
+    global fn_index
+
+    print("Searching for llm streamed completion function. Takes about 30 seconds.")
+    session_hash = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    chatdata = [[["write a comma", None]], None]
+    for i in range(10, 1000):
+        join_queue(session_hash, i, port, chatdata)
+        res = listen_for_updates(session_hash, port)
+        if res:
+            fn_index = i
+            return
+    raise Exception("Failed to find fn_index")
+
 def send_message(message):
+    global fn_index
+
     if not port:
         find_chat_with_rtx_port()
     if not port:
         raise Exception("Failed to find a server port for 'Chat with RTX'. Ensure the server is running.")
+    if not fn_index:
+        #comment this line
+        auto_find_fn_index(port)
+        print("To make initialization instant hardcode:\nfn_index =", fn_index)
+        # fn_index = 
 
     session_hash = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
 
     chatdata = [[[message, None]], None]
-    join_queue(session_hash, 100, port, chatdata)
+    join_queue(session_hash, fn_index, port, chatdata)
     return listen_for_updates(session_hash, port)
