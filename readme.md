@@ -2,7 +2,7 @@
 
 ### Usage
 
-Run `python3 rtx_server_july_2024.py` as administrator
+`.\start_server.bat`
 
 ```python
 import rtx_api_july_2024 as rtx_api
