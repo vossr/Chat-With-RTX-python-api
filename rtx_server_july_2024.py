@@ -44,12 +44,23 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         input_string = post_data.decode('utf-8')
         answer_stream = backend.query_stream(query=input_string)
-        answer = ''.join(part for part in answer_stream)
 
         self.send_response(200)
         self.send_header('Content-type', 'text/plain')
+        self.send_header('Transfer-Encoding', 'chunked')
         self.end_headers()
-        self.wfile.write(answer.encode('utf-8'))
+
+        for part in answer_stream:
+            print(part)
+            chunk = part.encode('utf-8')
+            if not chunk:
+                continue
+            # HTTP/1.1 chunked transfer encoding standard
+            chunk_size = len(chunk)
+            self.wfile.write(f"{chunk_size:x}\r\n".encode('utf-8'))
+            self.wfile.write(chunk + b"\r\n")
+            self.wfile.flush()
+        self.wfile.flush()
 
 httpd = HTTPServer(('', 8000), RequestHandler)
 httpd.serve_forever()
