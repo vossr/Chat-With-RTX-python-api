@@ -24,5 +24,5 @@ def send_message_streaming(message):
 def send_message(message):
     response = ""
     for data in send_message_streaming(message):
-        response += data
+        response += data + '\n'
     return response
